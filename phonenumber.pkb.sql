@@ -1,0 +1,197 @@
+
+--------------------------------------------------------------------------------
+--
+-- 2016-01-07, NV - libphonenumber.pkb.sql
+--
+
+-- create the package spcification for the google libphonenumber functionality
+
+prompt ... running libphonenumber.pkb.sql
+
+--
+alter session set current_schema = google;
+
+--
+create or replace package body phonenumber as
+
+    -- private
+    --
+    function format_( p in varchar2, r in varchar2, s in enum ) return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.format( java.lang.String, java.lang.String, int ) return java.lang.String';
+
+    --
+    function get_region_code_( p in varchar2 ) return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.get_region_code( java.lang.String ) return java.lang.String';
+
+    --
+    function is_possible_number_( p in varchar2, r in varchar2 ) return boolean as
+    language java
+    name 'oracle.google.phonenumber.is_possible_number( java.lang.String, java.lang.String ) return boolean';
+
+    --
+    function is_valid_for_region_( p in varchar2, r in varchar2 ) return boolean as
+    language java
+    name 'oracle.google.phonenumber.is_valid_for_region( java.lang.String, java.lang.String ) return boolean';
+
+    --
+    function get_supported_regions_ return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.get_supported_regions() return java.lang.String';
+
+    --
+    function is_supported_region_( r in varchar2 ) return boolean as
+    language java
+    name 'oracle.google.phonenumber.is_supported_region( java.lang.String ) return boolean';
+
+    --
+    function get_type_( p in varchar2, r in varchar2 ) return enum as
+    language java
+    name 'oracle.google.phonenumber.get_type( java.lang.String, java.lang.String ) return int';
+
+    --
+    function get_countrycode_( p in varchar2, r in varchar2 ) return number as
+    language java
+    name 'oracle.google.phonenumber.get_countrycode( java.lang.String, java.lang.String ) return int';
+
+    --
+    function get_national_( p in varchar2, r in varchar2 ) return number as
+    language java
+    name 'oracle.google.phonenumber.get_national( java.lang.String, java.lang.String ) return long';
+
+    --
+    function truncate_number_( p in varchar2 ) return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.truncate_number( java.lang.String ) return java.lang.String';
+
+    --
+    function probable_( p in varchar2, s in enum ) return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.probable( java.lang.String, int ) return java.lang.String';
+
+    -- public
+    --
+    function to_type( type in enum ) return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.to_type( int ) return java.lang.String';
+
+    --
+    function to_type( type in varchar2 ) return enum as
+    language java
+    name 'oracle.google.phonenumber.to_type( java.lang.String ) return int';
+
+    --
+    function to_format( type in enum ) return varchar2 as
+    language java
+    name 'oracle.google.phonenumber.to_format( int ) return java.lang.String';
+
+    --
+    function to_format( type in varchar2 ) return enum as
+    language java
+    name 'oracle.google.phonenumber.to_format( java.lang.String ) return int';
+
+    --
+    function format( phone  in varchar2,
+                     region in varchar2 default 'US',
+                     style  in enum     default format_international ) return varchar2 is
+    begin
+
+        return format_( phone, region, style );
+
+    end format;
+
+    --
+    function get_region_code( phone in varchar2 )  return varchar2 is
+    begin
+
+        return get_region_code_( phone );
+
+    end get_region_code;
+
+    --
+    function is_possible_number( phone  in varchar2,
+                                 region in varchar2 default 'US' ) return boolean is
+    begin
+
+        return is_possible_number_( phone, region );
+
+    end is_possible_number;
+
+    --
+    function is_valid_for_region( phone  in varchar2,
+                                  region in varchar2 default 'US' ) return boolean is
+    begin
+
+        return is_valid_for_region_( phone, region );
+
+    end is_valid_for_region;
+
+    --
+    function get_supported_regions return varchar2 as
+    begin
+
+        return get_supported_regions_();
+
+    end get_supported_regions;
+
+    --
+    function is_supported_region( region in varchar2 ) return boolean is
+    begin
+
+        return is_supported_region_( region );
+
+    end is_supported_region;
+
+    --
+    function get_type( phone  in varchar2,
+                       region in varchar2 default 'US' ) return enum is
+    begin
+
+        return get_type_( phone, region );
+
+    end get_type;
+
+    --
+    function get_countrycode( phone  in varchar2,
+                              region in varchar2 default null ) return number is
+    begin
+
+        return get_countrycode_( phone, region );
+
+    end get_countrycode;
+
+    --
+    function get_national( phone  in varchar2,
+                           region in varchar2 default null ) return number is
+    begin
+
+        return get_national_( phone, region );
+
+    end get_national;
+
+    --
+    function truncate_number( phone in varchar2 ) return varchar2 is
+    begin
+
+        return truncate_number_( phone );
+
+    end truncate_number;
+
+    --
+    function probable( phone in varchar2,
+                       style in enum default format_international ) return varchar2 is
+    begin
+
+        return probable_( phone, style );
+
+    end probable;
+
+end phonenumber;
+/
+
+show errors
+
+--
+-- ... done!
+--
