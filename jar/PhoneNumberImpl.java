@@ -520,6 +520,12 @@ public class PhoneNumberImpl
     //
     public static String probable( String phone, int style )
     {
+        return standardize( phone, "US", style );
+    }
+
+    //
+    public static String standardize( String phone, String region, int style )
+    {
         String val = "";
         PhoneNumber num;
         PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
@@ -530,17 +536,17 @@ public class PhoneNumberImpl
 
             if ( utl.isPossibleNumber( num ) )
             {
-                // try US first
+                // try region first
                 try
                 {
-                    num = utl.parse( phone, "US" );
+                    num = utl.parse( phone, region );
 
-                    if ( utl.isValidNumberForRegion( num, "US" ) )
-                        val = format( phone, "US", style );
+                    if ( utl.isValidNumberForRegion( num, region ) )
+                        val = format( phone, region, style );
                 }
                 catch ( Exception e ) {}
 
-                // if US, does match, then find the first probable country in the supported list
+                // if US, doesn't match, then find the first probable country in the supported list
                 if ( val.length() == 0 )
                 {
                     try
@@ -548,14 +554,14 @@ public class PhoneNumberImpl
                         for ( String reg : utl.getSupportedRegions() )
                         {
                             // skip over US, since we tried that already
-                            if ( ! reg.equalsIgnoreCase( "US" ) )
+                            if ( ! reg.equalsIgnoreCase( region ) )
                             {
                                 num = utl.parse( phone, reg );
 
                                 if ( utl.isValidNumberForRegion( num, reg ) )
                                 {
                                     val = format( phone, reg, style );
-                                    break;  // find the first one
+                                    break;  // found
                                 }
                             }
                         }

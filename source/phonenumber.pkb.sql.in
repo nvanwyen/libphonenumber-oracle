@@ -70,6 +70,11 @@ create or replace package body phonenumber as
     language java
     name 'oracle.google.phonenumber.probable( java.lang.String, int ) return java.lang.String';
 
+    --
+    function standardize_( p in varchar2, r in varchar2, s in enum ) return varchar2 parallel_enable as
+    language java
+    name 'oracle.google.phonenumber.standardize( java.lang.String, java.lang.String, int ) return java.lang.String';
+
     -- public
     --
     function version return varchar2 is
@@ -195,6 +200,37 @@ create or replace package body phonenumber as
         return probable_( phone, style );
 
     end probable;
+
+    --
+    function standardize( phone  in varchar2,
+                          region in varchar2 default 'US',
+                          style  in enum     default format_international ) return varchar2 parallel_enable is
+    begin
+
+        return nvl( standardize_( replace( replace(
+                                           replace(
+                                           replace(
+                                           replace(
+                                           replace(
+                                           replace(
+                                           replace(
+                                           replace(
+                                           replace( replace( phone, '/', '' ),
+                                                    '*', '' ),
+                                                    '+', '' ),
+                                                    '.', '' ),
+                                                    '(', '' ),
+                                                    ')', '' ),
+                                                    '|', '' ),
+                                                    '{', '' ),
+                                                    '}', '' ),
+                                                    '[', '' ),
+                                                    ']', '' ),
+                                  region,
+                                  style ),
+                    phone );
+
+    end standardize;
 
 end phonenumber;
 /

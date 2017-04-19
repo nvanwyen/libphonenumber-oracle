@@ -3,7 +3,7 @@
 #
 if [[ -z ${@} ]] ; then
 
-    echo "Usage $0 <connection>"
+    echo "Usage $0 <jar> [<connection>]"
     exit 1
 
 fi
@@ -12,8 +12,10 @@ fi
 dts=`date +%Y%m%d%H%M%S`
 dir=`dirname $0`
 
+jar=$1 ; shift
+
 #
-if [ `ls ${dir}/jar/*.jar | wc -l` -gt 0 ] ; then
+if [ -f ${jar} ] ; then
 
     #
     u=$1
@@ -73,27 +75,39 @@ if [ `ls ${dir}/jar/*.jar | wc -l` -gt 0 ] ; then
     st="`date +%Y-%b-%d` `date +%H:%M:%S`" ; st=${st^^}
 
     #
-    for jar in `ls ${dir}/jar/*.jar` ; do
+    echo
+    echo "Loading jar: ${jar}"
 
-        #
-        ${dir}/loadjar.sh "${jar}" "${u}" "${p}" \
-            | tee --append ${dir}/load-jdbc.${dts}.log
+    #
+    (
+        loadjava -force \
+                 -genmissing \
+                 -order \
+                 -verbose \
+                 -resolve \
+                 -recursivejars \
+                 -resolver "((* google) (* sys) (* public))" \
+                 -user "${u}" \
+                 -schema google \
+                 ${jar} << !
+${p}
 
-    done ;
+!
+    ) 2>&1
 
     #
     et="`date +%Y-%b-%d` `date +%H:%M:%S`" ; et=${et^^}
 
     #
-    echo                | tee --append ${dir}/load-jdbc.${dts}.log
-    echo "Start: ${st}" | tee --append ${dir}/load-jdbc.${dts}.log
-    echo "Ended: ${et}" | tee --append ${dir}/load-jdbc.${dts}.log
-    echo                | tee --append ${dir}/load-jdbc.${dts}.log
+    echo
+    echo "Jar Load start: ${st}"
+    echo "Jar Load ended: ${et}"
+    echo
 
 else
 
     #
-    echo "No Jar files to load found!"
+    echo "No Jar to load found!"
     exit 1
 
 fi

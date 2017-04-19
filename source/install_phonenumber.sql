@@ -32,6 +32,7 @@ set termout on;
 spool &&log
 
 -- set current version
+prompt ... running ver
 !( ./ver )
 
 -- schema
@@ -42,11 +43,11 @@ spool &&log
 
 -- implementation
 prompt ... running compile.sh
-! ./compile.sh
+!( ./compile.sh )
 
 -- 3rd-party JAR
 prompt ... running loadjava.sh
-! ./loadjava.sh sys xxx
+!( ./loadjava.sh sys xxx )
 
 -- java wrapper (source)
 @@phonenumber.jva.sql

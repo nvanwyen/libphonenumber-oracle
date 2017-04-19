@@ -89,6 +89,11 @@ create or replace package phonenumber as
     function probable( phone in varchar2,
                        style in enum default format_international ) return varchar2 parallel_enable;
 
+    --
+    function standardize( phone  in varchar2,
+                          region in varchar2 default 'US',
+                          style  in enum     default format_international ) return varchar2 parallel_enable;
+
 end phonenumber;
 /
 
