@@ -37,54 +37,57 @@ create or replace package phonenumber as
     format_e164          constant enum :=  3;
 
     --
-    function to_type( type in enum ) return varchar2;
-    function to_type( type in varchar2 ) return enum;
+    function version return varchar2;
 
     --
-    function to_format( type in enum ) return varchar2;
-    function to_format( type in varchar2 ) return enum;
+    function to_type( type in enum ) return varchar2 parallel_enable;
+    function to_type( type in varchar2 ) return enum parallel_enable;
+
+    --
+    function to_format( type in enum ) return varchar2 parallel_enable;
+    function to_format( type in varchar2 ) return enum parallel_enable;
 
     --
     function format( phone  in varchar2,
                      region in varchar2 default 'US',
-                     style  in enum     default format_international ) return varchar2;
+                     style  in enum     default format_international ) return varchar2 parallel_enable;
 
     --
-    function get_region_code( phone in varchar2 ) return varchar2;
+    function get_region_code( phone in varchar2 ) return varchar2 parallel_enable;
 
     --
     function is_possible_number( phone  in varchar2,
-                                 region in varchar2 default 'US' ) return boolean;
+                                 region in varchar2 default 'US' ) return boolean parallel_enable;
 
     --
     function is_valid_for_region( phone  in varchar2,
-                                  region in varchar2 default 'US' ) return boolean;
+                                  region in varchar2 default 'US' ) return boolean parallel_enable;
 
     --
-    function get_supported_regions return varchar2;
+    function get_supported_regions return varchar2 parallel_enable;
 
     --
-    function is_supported_region( region in varchar2 ) return boolean;
+    function is_supported_region( region in varchar2 ) return boolean parallel_enable;
 
     --
     function get_type( phone  in varchar2,
-                       region in varchar2 default 'US' ) return enum;
+                       region in varchar2 default 'US' ) return enum parallel_enable;
 
     --
     function get_countrycode( phone  in varchar2,
-                              region in varchar2 default null ) return number;
+                              region in varchar2 default null ) return number parallel_enable;
 
 
     --
     function get_national( phone  in varchar2,
-                           region in varchar2 default null ) return number;
+                           region in varchar2 default null ) return number parallel_enable;
 
     --
-    function truncate_number( phone in varchar2 ) return varchar2;
+    function truncate_number( phone in varchar2 ) return varchar2 parallel_enable;
 
     --
     function probable( phone in varchar2,
-                       style in enum default format_international ) return varchar2;
+                       style in enum default format_international ) return varchar2 parallel_enable;
 
 end phonenumber;
 /

@@ -2,7 +2,7 @@
 
 dir=$1
 src="jar"
-cls="libphonenumber-7.0.jar"
+cls="libphonenumber.jar"
 flg="-XDignore.symbol.file -Xlint:unchecked"
 
 if [[ -z ${ORACLE_HOME} ]] ; then

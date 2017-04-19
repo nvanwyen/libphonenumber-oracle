@@ -31,6 +31,9 @@ set termout on;
 --
 spool &&log
 
+-- set current version
+!( ./ver )
+
 -- schema
 @@phonenumber.sch.sql
 
@@ -43,7 +46,7 @@ prompt ... running compile.sh
 
 -- 3rd-party JAR
 prompt ... running loadjava.sh
-! ./loadjava.sh
+! ./loadjava.sh sys xxx
 
 -- java wrapper (source)
 @@phonenumber.jva.sql

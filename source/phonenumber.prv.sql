@@ -8,6 +8,24 @@
 prompt ... running libphonenumber.prv.sql
 
 --
+declare
+
+    ts varchar2( 4000 );
+
+begin
+
+    --
+    select default_tablespace into ts
+      from dba_users
+     where username = 'GOOGLE';
+
+    --
+    execute immediate 'alter user google quota unlimited on ' || ts;
+
+end;
+/
+
+--
 begin
 
     --

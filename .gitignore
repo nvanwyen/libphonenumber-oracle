@@ -1,2 +1,7 @@
 # Directoies
 archive
+
+# local dev
+.push
+pull.sh
+push.sh
