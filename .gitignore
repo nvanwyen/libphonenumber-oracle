@@ -3,5 +3,8 @@ archive
 
 # local dev
 .push
+.pull
+.dist
 pull.sh
 push.sh
+dist.sh
