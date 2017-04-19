@@ -205,30 +205,13 @@ create or replace package body phonenumber as
     function standardize( phone  in varchar2,
                           region in varchar2 default 'US',
                           style  in enum     default format_international ) return varchar2 parallel_enable is
+
+        phn varchar2( 4000 ) := regexp_replace( phone, '[^1-9]', null );
+
     begin
 
-        return nvl( standardize_( replace( replace(
-                                           replace(
-                                           replace(
-                                           replace(
-                                           replace(
-                                           replace(
-                                           replace(
-                                           replace(
-                                           replace( replace( phone, '/', '' ),
-                                                    '*', '' ),
-                                                    '+', '' ),
-                                                    '.', '' ),
-                                                    '(', '' ),
-                                                    ')', '' ),
-                                                    '|', '' ),
-                                                    '{', '' ),
-                                                    '}', '' ),
-                                                    '[', '' ),
-                                                    ']', '' ),
-                                  region,
-                                  style ),
-                    phone );
+        --
+        return nvl( standardize_( phn, region, style ), phn );
 
     end standardize;
 

@@ -532,7 +532,7 @@ public class PhoneNumberImpl
 
         try
         {
-            num = utl.parse( phone, "" );
+            num = utl.parse( phone, "US" );
 
             if ( utl.isPossibleNumber( num ) )
             {
@@ -542,9 +542,9 @@ public class PhoneNumberImpl
                     num = utl.parse( phone, region );
 
                     if ( utl.isValidNumberForRegion( num, region ) )
-                        val = format( phone, region, style );
+                        val = utl.format( num, format_to_enum( style ) );
                 }
-                catch ( Exception e ) {}
+                catch ( Exception e ) { System.out.println( "US exception" ); System.out.println( e.getMessage() ); }
 
                 // if US, doesn't match, then find the first probable country in the supported list
                 if ( val.length() == 0 )
@@ -560,17 +560,17 @@ public class PhoneNumberImpl
 
                                 if ( utl.isValidNumberForRegion( num, reg ) )
                                 {
-                                    val = format( phone, reg, style );
+                                    val = utl.format( num, format_to_enum( style ) );
                                     break;  // found
                                 }
                             }
                         }
                     }
-                    catch ( Exception e ) {}
+                    catch ( Exception e ) { System.out.println( "Inner exception" ); System.out.println( e.getMessage() ); }
                 }
             }
         }
-        catch ( Exception e ) {}
+        catch ( Exception e ) { System.out.println( "Outter exception" ); System.out.println( e.getMessage() ); }
 
         return val;
     }
