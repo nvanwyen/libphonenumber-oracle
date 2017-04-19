@@ -175,6 +175,13 @@ create or replace and resolve java source named "phonenumber" as
             PhoneNumberImpl impl = new PhoneNumberImpl();
             return impl.probable( phone, style );
         }
+
+        //
+        public static String standardize( String phone, String region, int style )
+        {
+            PhoneNumberImpl impl = new PhoneNumberImpl();
+            return impl.standardize( phone, region, style );
+        }
     }
 
 /
