@@ -544,7 +544,7 @@ public class PhoneNumberImpl
                     if ( utl.isValidNumberForRegion( num, region ) )
                         val = utl.format( num, format_to_enum( style ) );
                 }
-                catch ( Exception e ) { System.out.println( "US exception" ); System.out.println( e.getMessage() ); }
+                catch ( Exception e ) {}
 
                 // if US, doesn't match, then find the first probable country in the supported list
                 if ( val.length() == 0 )
@@ -566,11 +566,11 @@ public class PhoneNumberImpl
                             }
                         }
                     }
-                    catch ( Exception e ) { System.out.println( "Inner exception" ); System.out.println( e.getMessage() ); }
+                    catch ( Exception e ) {}
                 }
             }
         }
-        catch ( Exception e ) { System.out.println( "Outter exception" ); System.out.println( e.getMessage() ); }
+        catch ( Exception e ) {}
 
         return val;
     }
