@@ -40,7 +40,7 @@ declare
 
     maj number;
     mnr number;
-    lvl number;
+    pch number;
 
 begin
 
@@ -52,19 +52,19 @@ begin
     --
     if ( length( trim( ver ) ) > 0 ) then
 
-        --
+        -- remove "v" from "v8.1.4"
         ver := replace( ver, 'v', '' );
 
         --
         begin
 
-            --
+            -- assumes format 8.1.4 (8 @ index 1, 1 @ idnex 3 and 4 @ index 5)
             maj := to_number( substr( ver, 1, 1 ) );
             mnr := to_number( substr( ver, 3, 1 ) );
-            lvl := to_number( substr( ver, 5, 1 ) );
+            pch := to_number( substr( ver, 5, 1 ) );
 
             --
-            if ( ( maj >= 8 ) and ( mnr >= 4 ) and ( lvl > 1 ) ) then
+            if ( ( maj >= 8 ) and ( mnr >= 4 ) and ( pch > 1 ) ) then
 
                 --
                 dbms_output.put_line( 'GOOGLE version [v' || ver || '] ready for patching' );
