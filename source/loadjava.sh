@@ -99,4 +99,4 @@ else
 fi
 
 #
-exit $?
+exit 0

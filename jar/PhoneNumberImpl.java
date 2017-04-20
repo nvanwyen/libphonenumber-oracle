@@ -37,9 +37,13 @@ public class PhoneNumberImpl
     public static final int FORMAT_E164          =  3;
 
     //
+    private static PhoneNumberUtil utl_;
+
+    //
     public PhoneNumberImpl()
     {
         // ctor
+        utl_ = PhoneNumberUtil.getInstance();
     }
 
     //
@@ -373,13 +377,12 @@ public class PhoneNumberImpl
     //
     public static String format( String phone, String region, int style )
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
         String val = "";
 
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, region );
-            val =  utl.format( num, format_to_enum( style ) );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, region );
+            val =  utl_.format( num, format_to_enum( style ) );
         }
         catch ( Exception e )
         {
@@ -392,13 +395,12 @@ public class PhoneNumberImpl
     //
     public static String get_region_code( String phone )
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
         String val = "";
 
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, "" );
-            val =  utl.getRegionCodeForNumber( num );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, "" );
+            val =  utl_.getRegionCodeForNumber( num );
         }
         catch ( Exception e )
         {
@@ -411,7 +413,7 @@ public class PhoneNumberImpl
     //
     public static boolean is_possible_number( String phone, String region )
     {
-        return PhoneNumberUtil.getInstance().isPossibleNumber( phone, region );
+        return utl_.isPossibleNumber( phone, region );
     }
 
     //
@@ -419,12 +421,10 @@ public class PhoneNumberImpl
     {
         boolean ok = false;
 
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
-
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, region );
-            ok = utl.isValidNumberForRegion( num, region );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, region );
+            ok = utl_.isValidNumberForRegion( num, region );
         }
         catch ( Exception e )
         {
@@ -437,20 +437,18 @@ public class PhoneNumberImpl
     //
     public static Set<String> get_supported_regions()
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
-        return utl.getSupportedRegions();
+        return utl_.getSupportedRegions();
     }
 
     //
     public static int get_type( String phone, String region )
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
         int val = TYPE_UNKNOWN;
 
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, region );
-            val =  enum_to_type( utl.getNumberType( num ) );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, region );
+            val =  enum_to_type( utl_.getNumberType( num ) );
         }
         catch ( Exception e )
         {
@@ -463,12 +461,11 @@ public class PhoneNumberImpl
     //
     public static int get_countrycode( String phone, String region )
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
         int val = 0;
 
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, region );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, region );
             val = num.getCountryCode();
         }
         catch ( Exception e )
@@ -482,12 +479,11 @@ public class PhoneNumberImpl
     //
     public static long get_national( String phone, String region )
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
         long val = 0;
 
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, region );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, region );
             val = num.getNationalNumber();
         }
         catch ( Exception e )
@@ -501,12 +497,11 @@ public class PhoneNumberImpl
     //
     public static String truncate_number( String phone )
     {
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
         String val = "";
 
         try
         {
-            Phonenumber.PhoneNumber num = utl.parse( phone, "" );
+            Phonenumber.PhoneNumber num = utl_.parse( phone, "" );
             val = format( phone, "", FORMAT_INTERNATIONAL );
         }
         catch ( Exception e )
@@ -528,21 +523,20 @@ public class PhoneNumberImpl
     {
         String val = "";
         PhoneNumber num;
-        PhoneNumberUtil utl = PhoneNumberUtil.getInstance();
 
         try
         {
-            num = utl.parse( phone, "US" );
+            num = utl_.parse( phone, "US" );
 
-            if ( utl.isPossibleNumber( num ) )
+            if ( utl_.isPossibleNumber( num ) )
             {
                 // try region first
                 try
                 {
-                    num = utl.parse( phone, region );
+                    num = utl_.parse( phone, region );
 
-                    if ( utl.isValidNumberForRegion( num, region ) )
-                        val = utl.format( num, format_to_enum( style ) );
+                    if ( utl_.isValidNumberForRegion( num, region ) )
+                        val = utl_.format( num, format_to_enum( style ) );
                 }
                 catch ( Exception e ) {}
 
@@ -551,16 +545,16 @@ public class PhoneNumberImpl
                 {
                     try
                     {
-                        for ( String reg : utl.getSupportedRegions() )
+                        for ( String reg : utl_.getSupportedRegions() )
                         {
                             // skip over US, since we tried that already
                             if ( ! reg.equalsIgnoreCase( region ) )
                             {
-                                num = utl.parse( phone, reg );
+                                num = utl_.parse( phone, reg );
 
-                                if ( utl.isValidNumberForRegion( num, reg ) )
+                                if ( utl_.isValidNumberForRegion( num, reg ) )
                                 {
-                                    val = utl.format( num, format_to_enum( style ) );
+                                    val = utl_.format( num, format_to_enum( style ) );
                                     break;  // found
                                 }
                             }

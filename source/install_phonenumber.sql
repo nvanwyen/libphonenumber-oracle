@@ -12,6 +12,9 @@
 prompt ... running install_phonenumber.sql
 
 --
+whenever oserror exit
+
+--
 set linesize 160
 set pagesize 50000
 set trimspool on

@@ -206,7 +206,7 @@ create or replace package body phonenumber as
                           region in varchar2 default 'US',
                           style  in enum     default format_international ) return varchar2 parallel_enable is
 
-        phn varchar2( 4000 ) := regexp_replace( phone, '[^1-9]', null );
+        phn varchar2( 4000 ) := regexp_replace( phone, '[^0-9]', null );
 
     begin
 

@@ -18,13 +18,21 @@ jar="$ORACLE_HOME/jdk/bin/jar"
 #
 function compile()
 {
-    f=$1
+    local f=$1
+    local r
 
     if [ -f ${f} ] ; then
 
         echo -n "Compiling $f ... "
 
         ${javac} ${flg} -cp ${cls} ${f}
+        r=$?
+
+        if [ ${r} -ne 0 ] ; then
+
+            exit ${r}
+
+        fi
         echo ""
 
     else
@@ -99,3 +107,4 @@ else
 
 fi
 
+exit 0
